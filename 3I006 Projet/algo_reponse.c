@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "utilitaire.h"
 
 //Lis une l'instance de chaînes de nucléotides dans le fichier nomfichier et les store dans deux tableaux de char, et leurs tailles dans deux int.
@@ -49,12 +50,37 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
     //lecture de la chaîne de caractère.
     i = 1;
     while( buffer[i] != '-' ) i++;
-    taillePremiereListe = 0;
+    tailleSecondeListe = 0;
     for( j = i ; j >=0 ; j-- ) *tailleSecondeListe += ( buffer[j] - 48 ) * 10 * i--;
 
+    //initialisation des tableaux de liste
+    *premiereListe = ( char * ) malloc ( sizeof( char ) * (*taillePremiereListe));
+    *secondeListe = ( char * ) malloc ( sizeof( char ) * (*tailleSecondeListe));
+
+    //remplissage premier tableau
     i = *taillePremiereListe;
     for( j = 0 ; j < i ; j++ ){
+        if( !fgets( buffer , 1 , f )){
+            printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
+            fclose( f );
+            free (*premiereListe);
+            free (*secondeListe);
+            return -1;
+        }
+        *premiereListe[j] = buffer[0];
+    }
 
+    //remplissage second tableau
+    i = *taillePremiereListe;
+    for( j = 0 ; j < i ; j++ ){
+        if( !fgets( buffer , 1 , f )){
+            printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
+            fclose( f );
+            free (*premiereListe);
+            free (*secondeListe);
+            return -1;
+        }
+        *secondeListe[j] = buffer[0];
     }
 
     return 1;
