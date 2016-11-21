@@ -1,7 +1,8 @@
 # depslib dependency file v1.0
-1479761737 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\algo_reponse.c
+1479766966 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\algo_reponse.c
 	<stdio.h>
 	<stdlib.h>
+	"algo_reponse.h"
 	"utilitaire.h"
 
 1479760003 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\main.c
@@ -11,4 +12,6 @@
 	<stdio.h>
 
 1479762015 c:\users\florent\documents\github\3i006-projet\3i006 projet\utilitaire.h
+
+1479766985 c:\users\florent\documents\github\3i006-projet\3i006 projet\algo_reponse.h
 
