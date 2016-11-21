@@ -9,3 +9,9 @@ int initialiserTableau( char * buffer , int taille ){
 
     return 1;
 }
+
+int min3( int a , int b , int c ){
+    if( a < b ) if( a < c ) return a;
+    if( b < c ) return b;
+    return c;
+}
