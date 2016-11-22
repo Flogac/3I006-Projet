@@ -113,6 +113,10 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
 
 void afficherTailleRaisonnable( char * tabX , char * tabY , int tailleX , int tailleY ){
     if( !tabX || !tabY || !tailleX || !tailleY ) return;
+    if( tailleX > 50 || tailleY > 50 ){
+        printf( "Chaines trop longues pour etre affichees.\n");
+        return;
+    }
 
     int i ;
     for( i = 0 ; i < tailleX - 1 ; i++ ) printf( "%c " , tabX[i] );
