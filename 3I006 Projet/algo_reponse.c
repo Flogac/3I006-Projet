@@ -167,7 +167,7 @@ Tant que TAILLE(x)>0 et TAILLE(y)>0 faire
                      y<- COUPE(y) ;
                 sinon faire
                      x<-COUPE (x) ;
-(Retourner align ;)
+(Retourner align ;).
 */
 Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dgap ){
     Liste * align = NULL;
