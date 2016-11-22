@@ -9,6 +9,8 @@ char ** F2a;
 char * X2b;
 char* Y2b ;
 char ** F2b;
+char * X;
+char * Y;
 
 // Question 4.1
 
@@ -59,7 +61,7 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
     }
     //lecture de la chaîne de caractère.
     i = 1;
-    while( buffer[i] != '-' ) i++;
+    while( buffer[i++] != '-' );
     tailleSecondeListe = 0;
     for( j = i ; j >=0 ; j-- ) *tailleSecondeListe += ( buffer[j] - 48 ) * 10 * i--;
 
@@ -122,7 +124,7 @@ sinon faire
 Retourner cmin 
 */
 
-int COUT1( int * tabX , int * tabY , int tailleX , int tailleY , int dxy , int dgap ){
+int COUT1( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap ){
     if( !tabX ) return 0;
     if( !tabY ) return 0;
     if( !dxy && !dgap ) return 0; // Le coût minimum sera toujours nul.
@@ -143,39 +145,139 @@ int COUT1( int * tabX , int * tabY , int tailleX , int tailleY , int dxy , int d
 }
 
 /*
-Soit COUPE (liste x) l’algorithme qui permet de supprimer le dernier élement d’une liste.
-Soit DERNIER(liste x) l’algorithme qui renvoie le dernier élement d’une liste.
-Soit TAILLE(liste x) l’algorithme qui renvoie le nombre d’élements d’une liste.
-Soit REMPLIT(tableau x) l’algorithme qui remplit toutes les cases d’un tableau par -1.
-Algorithme : COUT2
-Entrées : x : liste de caractères, y : liste de caractères, dxy : entier, dgap : entier
-t <-0, c1<-0,  c2<-0,  c3<-0, t1 <-tab[TAILLE(y)], t2 <-tab[TAILLE(y)]
-REMPLIT(t1) ;
-REMPLIT(t2) ;
-t2[0]<-0 ;
-si TAILLE(x)=0 faire
-    t1[0] <- TAILLE(y)*dgap ;
-sinon faire
-    si TAILLE(y)=0 faire
-         t1[0] <- TAILLE(x)*dgap ;
+Algorithme : SOL1
+Entrées : x : tableau de caractères, y : liste de caractères , dxy : entier, dgap : entier
+align<-‘ ’(liste vide), cmin <-0, c1<-0,  c2<-0,  c3<-0,
+Tant que TAILLE(x)>0 et TAILLE(y)>0 faire
+     si DERNIER (x) = DERNIER (y) faire
+         x<-COUPE (x) ;
+         y<- COUPE(y) ;
+         align<-AJOUT(align,’DERNIER(x), DERNIER(y)’) ;
+     sinon faire
+         c1<-F(x,y)+ dxy;
+         c2<-F(x, COUPE(y)) + dgap ;
+         c3<-F (COUPE(x), y) + dgap ;
+         cmin<-min(c1,c2,c3) ;
+         si cmin=c1 faire
+                x<-COUPE (x) ;
+                y<- COUPE(y) ;
+                align<-AJOUT(align,’DERNIER(x), DERNIER(y)’);
          sinon faire
-            si t1[TAILLE(x)-1]=-1 faire
-               si DERNIER (x) = DERNIER (y) faire
-                     cmin<-COUT1 (COUPE (x), COUPE(y)) ;
+               si cmin=c2 faire
+                     y<- COUPE(y) ;
                 sinon faire
-                      c1<-COUT1 (COUPE (x), COUPE(y)) + dxy;
-                      c2<-COUT1 (x, COUPE(y)) + dgap ;
-                      c3<-COUT1 (COUPE(x), y) + dgap ;
-                      cmin<-min(c1,c2,c3) ;
-Retourner cmin 
+                     x<-COUPE (x) ;
+(Retourner align ;)
 */
-int COUT2( int * tabX , int * tabY , int tailleX , int tailleY , int dxy , int dgap ){
+Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dgap ){
+    Liste * align = NULL;
+    int cmin = 0 , c1 , c2 , c3;
+    while( taillex && tailley ){
+        if( x[taillex - 1] == y[tailley - 1] ){
+            taillex--;
+            tailley--;
+            if( align ){
+                concatener( align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
+            }else{
+                align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL );
+                align->precedent = align;
+            }
+        } else {
+            c1 = COUT1( x , y , taillex , tailley , dxy , dgap ) + dxy ;
+            c2 = COUT1( x , y , taillex , tailley-1 , dxy , dgap ) + dxy ;
+            c3 = COUT1( x , y , taillex-1 , tailley , dxy , dgap ) + dxy ;
+            cmin = min3( c1 , c2 , c3 );
+            if( cmin == c1 ){
+                taillex--;
+                tailley--;
+                if( align ){
+                    concatener( align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
+                }else{
+                    align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL );
+                    align->precedent = align;
+                }
+            }else if( cmin == c2 ){
+                tailley--;
+            }else taillex--;
+        }
+    }
+    return align;
+}
+
+/*
+cout initialisé à 0 partout et de taille taillex * tailley.
+*/
+int COUT2intel( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int *** cout){
+    if( !tabX ) return 0;
+    if( !tabY ) return 0;
+    if( !cout ) return 0;
+    if( !dxy && !dgap ) return 0; // Le coût minimum sera toujours nul.
+
+    int i , j;
+
+    for( i = 0 ; i < tailleX ; i++ ) for( j = 0 ; j < tailleY ; j++ ){
+        if( !i ){
+            if( j ) *cout[i][j] = dgap;
+
+        }else{
+            if( !j ){ *cout[i][j] = *cout[i][j-1] + dgap;}
+            else *cout[i][j] = min3( *cout[i][j-1] + dgap , *cout[i-1][j] + dgap , *cout[i-1][j-1] + dxy );
+        }
+    }
+
+    return *cout[tailleX-1][tailleY-1];
+}
+
+/*
+
+*/
+int COUT2( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap ){
     if( !tabX ) return 0;
     if( !tabY ) return 0;
     if( !dxy && !dgap ) return 0; // Le coût minimum sera toujours nul.
 
-    int cmin = 0;
-    return cmin;
+    int i , j , cout[tailleX][tailleY];
+
+    for( i = 0 ; i < tailleX ; i++ ) initialiserTableauInt( cout[i] , tailleY );
+
+    for( i = 0 ; i < tailleX ; i++ ) for( j = 0 ; j < tailleY ; j++ ){
+        if( !i ){
+            if( j ) cout[i][j] = dgap;
+
+        }else{
+            if( !j ){ cout[i][j] = cout[i][j-1] + dgap;}
+            else cout[i][j] = min3( cout[i][j-1] + dgap , cout[i-1][j] + dgap , cout[i-1][j-1] + dxy );
+        }
+    }
+
+    return cout[tailleX-1][tailleY-1];
+}
+
+int COUT2BIS( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int THEi , int THEj ){
+    if( !tabX ) return 0;
+    if( !tabY ) return 0;
+    if( !dxy && !dgap ) return 0; // Le coût minimum sera toujours nul.
+
+    int i , j , cout[tailleX][tailleY];
+
+    for( i = 0 ; i < tailleX ; i++ ) initialiserTableauInt( cout[i] , tailleY );
+
+    for( i = 0 ; i < tailleX ; i++ ) for( j = 0 ; j < tailleY ; j++ ){
+        if( !i ){
+            if( j ) cout[i][j] = dgap;
+
+        }else{
+            if( !j ){ cout[i][j] = cout[i][j-1] + dgap;}
+            else cout[i][j] = min3( cout[i][j-1] + dgap , cout[i-1][j] + dgap , cout[i-1][j-1] + dxy );
+        }
+    }
+
+    return cout[THEi][THEj];
+}
+
+// nécessite un appel de COUT2intel
+int COUT2BISintel( int i , int j , int *** cout){
+    return *cout[i][j];
 }
 
 /*
@@ -214,8 +316,8 @@ Fonction SOL2(k1, l1, k2, l2, L)
                 FinPour
                 Retourner SOL2(k1, l1, i*, j, L) + SOL2(i*, j, k2, l2, L)
 */
-char SOL2(int k1 , int l1 , int k2 , int l2 , int L){
-    int i;
+char SOL2(int k1 , int l1 , int k2 , int l2 , Liste * L ){
+    int i , j;
     int k;
     int valmin;
     int val;
@@ -225,18 +327,20 @@ char SOL2(int k1 , int l1 , int k2 , int l2 , int L){
             for( i = k1 ; i <= k2 ; i++) X2a[i - k1] = X[i];
             for( i = l1 ; i <= l2 ; i++) Y2a[i - k1] = Y[i];
 
-            return F2b[k2-k1 , l2-l 1];
+            concatener( L , partie1 );
+            return F2b[k2-k1 ][ l2-l1];
         }else{
-            if( l2-l1 <= ){
-                    for( i = k1 ; i <= k2 ) X2b[i - k1 ] = X[i];
-                    for( i = l1 ; i <= l2 ) Y2b[i - k1 ] = Y[i];
+            if( l2-l1 <= 2 ){
+                    for( i = k1 ; i <= k2 ; i++ ) X2b[i - k1 ] = X[i];
+                    for( i = l1 ; i <= l2 ; i++ ) Y2b[i - k1 ] = Y[i];
 
-                    return F2b[ k2-k1 , l2 -l1];
+                    concatener( L , partie1 );
+                    return F2b[ k2-k1 ][ l2 -l1];
             }else{
                 j = l1 +((l2-l1+1)/2);
                 k = k1;
                 valmin = COUT2( k1 , j ) + COUT2BIS( k1 , j );
-                for( i = k1+1 ; i<= k2 ){
+                for( i = k1+1 ; i<= k2 ; i++){
                     val = COUT2(i , j) + COUT2BIS( i , j );
                     if( valmin > val ){
                         valmin = val;
@@ -251,13 +355,16 @@ char SOL2(int k1 , int l1 , int k2 , int l2 , int L){
 }
 
 
-char appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , int L){
+char appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste L , char ** Xe , char ** Ye ){
  X2a = *X2ae ;
  Y2a = *Y2ae ;
  F2a = *F2ae ;
  X2b = *X2be ;
  Y2b = *Y2be ;
  F2b = *F2be ;
+ X = *Xe;
+ Y = *Ye;
 
- return SOL2( k1 , l1 , k2 , l2 , L );
+
+ return SOL2( k1 , l1 , k2 , l2 , L , X , Y );
 }
