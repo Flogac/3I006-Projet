@@ -11,10 +11,10 @@ char* Y2b ;
 char ** F2b;
 char * X;
 char * Y;
-int dxy;
-int dgap;
-int tailleX;
-int tailleY;
+int dxyg;
+int dgapg;
+int tailleXg;
+int tailleYg;
 
 // Question 4.1
 
@@ -109,6 +109,15 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
 
     return 1;
 
+}
+
+void afficherTailleRaisonnable( char * tabX , char * tabY , int tailleX , int tailleY ){
+    if( !tabX || !tabY || !tailleX || !tailleY ) return;
+
+    int i ;
+    for( i = 0 ; i < tailleX - 1 ; i++ ) printf( "%c " , tabX[i] );
+    printf( "\n" );
+    for( i = 0 ; i < tailleY - 1 ; i++ ) printf( "%c " , tabY[i] );
 }
 
 //Question 4.2
@@ -338,20 +347,20 @@ void SOL2(int k1 , int l1 , int k2 , int l2 , Liste ** L ){
         if( k2 - k1 <= 2 ){
             for( i = k1 ; i <= k2 ; i++) X2a[i - k1] = X[i];
             for( i = l1 ; i <= l2 ; i++) Y2a[i - k1] = Y[i];
-            concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxy , dgap ) );
+            concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxyg , dgapg ) );
             //return F2b[k2-k1 ][ l2-l1];
         }else{
             if( l2-l1 <= 2 ){
                     for( i = k1 ; i <= k2 ; i++ ) X2b[i - k1 ] = X[i];
                     for( i = l1 ; i <= l2 ; i++ ) Y2b[i - k1 ] = Y[i];
-                    concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxy , dgap ) );
+                    concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxyg , dgapg ) );
                     //return F2b[ k2-k1 ][ l2 -l1];
             }else{
                 j = l1 +((l2-l1+1)/2);
                 k = k1;
-                valmin = COUT2( X , Y , tailleX , tailleY , dxy , dgap , k1 , j ) + COUT2BIS( X , Y , tailleX , tailleY , dxy , dgap , k1 , j) ;
+                valmin = COUT2( X , Y , tailleXg , tailleYg , dxyg , dgapg , k1 , j ) + COUT2BIS( X , Y , tailleXg , tailleYg , dxyg , dgapg , k1 , j) ;
                 for( i = k1+1 ; i<= k2 ; i++){
-                    val = COUT2( X , Y , tailleX , tailleY , dxy , dgap , i , j ) + COUT2BIS( X , Y , tailleX , tailleY , dxy , dgap , i , j) ;
+                    val = COUT2( X , Y , tailleXg , tailleYg , dxyg , dgapg , i , j ) + COUT2BIS( X , Y , tailleXg , tailleYg , dxyg , dgapg , i , j) ;
                     if( valmin > val ){
                         valmin = val;
                         k = i;
@@ -375,10 +384,10 @@ void appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char
  F2b = *F2be ;
  X = *Xe;
  Y = *Ye;
-dxy = dxye;
-dgap = dgape;
-tailleX = tailleXe;
-tailleY = tailleYe;
+dxyg = dxye;
+dgapg = dgape;
+tailleXg = tailleXe;
+tailleYg = tailleYe;
 
 SOL2( k1 , l1 , k2 , l2 , L );
 }
