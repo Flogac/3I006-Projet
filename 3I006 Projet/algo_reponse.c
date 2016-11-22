@@ -86,8 +86,16 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
         *premiereListe[j] = buffer[0];
     }
 
+    if( !fgets( buffer , 1 , f )){
+        printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
+        fclose( f );
+        free (*premiereListe);
+        free (*secondeListe);
+        return -1;
+    }
+
     //remplissage second tableau
-    i = *taillePremiereListe;
+    i = *tailleSecondeListe;
     for( j = 0 ; j < i ; j++ ){
         if( !fgets( buffer , 1 , f )){
             printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
@@ -358,7 +366,7 @@ void SOL2(int k1 , int l1 , int k2 , int l2 , Liste ** L ){
 }
 
 
-void appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste * L , char ** Xe , char ** Ye , int dxye , int dgape , int tailleXe , int tailleYe ){
+void appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste ** L , char ** Xe , char ** Ye , int dxye , int dgape , int tailleXe , int tailleYe ){
  X2a = *X2ae ;
  Y2a = *Y2ae ;
  F2a = *F2ae ;

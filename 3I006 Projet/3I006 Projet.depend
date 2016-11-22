@@ -8,7 +8,7 @@
 1479760003 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\main.c
 	<stdio.h>
 
-1479762003 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\utiliaire.c
+1479846940 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\utiliaire.c
 	<stdio.h>
 
 1479846940 c:\users\florent\documents\github\3i006-projet\3i006 projet\utilitaire.h
@@ -17,4 +17,9 @@
 	"listes.h"
 
 1479850119 c:\users\florent\documents\github\3i006-projet\3i006 projet\listes.h
+
+1479850165 source:c:\users\florent\documents\github\3i006-projet\3i006 projet\listes.c
+	<stdio.h>
+	<stdlib.h>
+	"listes.h"
 
