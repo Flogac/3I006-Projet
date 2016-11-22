@@ -11,6 +11,10 @@ char* Y2b ;
 char ** F2b;
 char * X;
 char * Y;
+int dxy;
+int dgap;
+int tailleX;
+int tailleY;
 
 // Question 4.1
 
@@ -177,7 +181,7 @@ Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dg
             taillex--;
             tailley--;
             if( align ){
-                concatener( align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
+                concatener( &align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
             }else{
                 align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL );
                 align->precedent = align;
@@ -191,7 +195,7 @@ Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dg
                 taillex--;
                 tailley--;
                 if( align ){
-                    concatener( align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
+                    concatener( &align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
                 }else{
                     align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL );
                     align->precedent = align;
@@ -207,7 +211,7 @@ Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dg
 /*
 cout initialisé à 0 partout et de taille taillex * tailley.
 */
-int COUT2intel( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int *** cout){
+int COUT2intel( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int *** cout , int THEi , int THEj ){
     if( !tabX ) return 0;
     if( !tabY ) return 0;
     if( !cout ) return 0;
@@ -215,7 +219,7 @@ int COUT2intel( char * tabX , char * tabY , int tailleX , int tailleY , int dxy 
 
     int i , j;
 
-    for( i = 0 ; i < tailleX ; i++ ) for( j = 0 ; j < tailleY ; j++ ){
+    for( i = THEi ; i < tailleX ; i++ ) for( j = THEj ; j < tailleY ; j++ ){
         if( !i ){
             if( j ) *cout[i][j] = dgap;
 
@@ -231,16 +235,16 @@ int COUT2intel( char * tabX , char * tabY , int tailleX , int tailleY , int dxy 
 /*
 
 */
-int COUT2( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap ){
+int COUT2( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int THEi , int THEj ){
     if( !tabX ) return 0;
     if( !tabY ) return 0;
     if( !dxy && !dgap ) return 0; // Le coût minimum sera toujours nul.
 
     int i , j , cout[tailleX][tailleY];
 
-    for( i = 0 ; i < tailleX ; i++ ) initialiserTableauInt( cout[i] , tailleY );
+    for( i = 0 ; i < tailleX ; i++ ) initialiserTableauInt( cout[i] , tailleY ); // Met toutes les cases à 0.
 
-    for( i = 0 ; i < tailleX ; i++ ) for( j = 0 ; j < tailleY ; j++ ){
+    for( i = THEi ; i < tailleX ; i++ ) for( j = THEj ; j < tailleY ; j++ ){
         if( !i ){
             if( j ) cout[i][j] = dgap;
 
@@ -260,7 +264,7 @@ int COUT2BIS( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , 
 
     int i , j , cout[tailleX][tailleY];
 
-    for( i = 0 ; i < tailleX ; i++ ) initialiserTableauInt( cout[i] , tailleY );
+    for( i = 0 ; i < tailleX ; i++ ) initialiserTableauInt( cout[i] , tailleY ); // Met toutes les cases à 0.
 
     for( i = 0 ; i < tailleX ; i++ ) for( j = 0 ; j < tailleY ; j++ ){
         if( !i ){
@@ -316,7 +320,7 @@ Fonction SOL2(k1, l1, k2, l2, L)
                 FinPour
                 Retourner SOL2(k1, l1, i*, j, L) + SOL2(i*, j, k2, l2, L)
 */
-char SOL2(int k1 , int l1 , int k2 , int l2 , Liste * L ){
+void SOL2(int k1 , int l1 , int k2 , int l2 , Liste ** L ){
     int i , j;
     int k;
     int valmin;
@@ -326,28 +330,27 @@ char SOL2(int k1 , int l1 , int k2 , int l2 , Liste * L ){
         if( k2 - k1 <= 2 ){
             for( i = k1 ; i <= k2 ; i++) X2a[i - k1] = X[i];
             for( i = l1 ; i <= l2 ; i++) Y2a[i - k1] = Y[i];
-
-            concatener( L , partie1 );
-            return F2b[k2-k1 ][ l2-l1];
+            concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxy , dgap ) );
+            //return F2b[k2-k1 ][ l2-l1];
         }else{
             if( l2-l1 <= 2 ){
                     for( i = k1 ; i <= k2 ; i++ ) X2b[i - k1 ] = X[i];
                     for( i = l1 ; i <= l2 ; i++ ) Y2b[i - k1 ] = Y[i];
-
-                    concatener( L , partie1 );
-                    return F2b[ k2-k1 ][ l2 -l1];
+                    concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxy , dgap ) );
+                    //return F2b[ k2-k1 ][ l2 -l1];
             }else{
                 j = l1 +((l2-l1+1)/2);
                 k = k1;
-                valmin = COUT2( k1 , j ) + COUT2BIS( k1 , j );
+                valmin = COUT2( X , Y , tailleX , tailleY , dxy , dgap , k1 , j ) + COUT2BIS( X , Y , tailleX , tailleY , dxy , dgap , k1 , j) ;
                 for( i = k1+1 ; i<= k2 ; i++){
-                    val = COUT2(i , j) + COUT2BIS( i , j );
+                    val = COUT2( X , Y , tailleX , tailleY , dxy , dgap , i , j ) + COUT2BIS( X , Y , tailleX , tailleY , dxy , dgap , i , j) ;
                     if( valmin > val ){
                         valmin = val;
                         k = i;
                     }
                 }
-                return SOL2(k1, l1, k, j, L) + SOL2(k, j, k2, l2, L);
+                SOL2(k1, l1, k, j, L);
+                SOL2(k, j, k2, l2, L);
             }
 
         }
@@ -355,7 +358,7 @@ char SOL2(int k1 , int l1 , int k2 , int l2 , Liste * L ){
 }
 
 
-char appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste L , char ** Xe , char ** Ye ){
+void appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste * L , char ** Xe , char ** Ye , int dxye , int dgape , int tailleXe , int tailleYe ){
  X2a = *X2ae ;
  Y2a = *Y2ae ;
  F2a = *F2ae ;
@@ -364,7 +367,10 @@ char appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char
  F2b = *F2be ;
  X = *Xe;
  Y = *Ye;
+dxy = dxye;
+dgap = dgape;
+tailleX = tailleXe;
+tailleY = tailleYe;
 
-
- return SOL2( k1 , l1 , k2 , l2 , L , X , Y );
+SOL2( k1 , l1 , k2 , l2 , L );
 }

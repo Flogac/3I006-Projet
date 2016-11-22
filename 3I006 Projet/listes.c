@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "listes.h"
 
 Liste * nouvelleListe( char a , char b , Liste * precedent , Liste * suivant ){
@@ -15,13 +17,17 @@ Liste * dernier( Liste * a ){
     return a->precedent;
 }
 
-void concatener( Liste * a , Liste * b ){
+void concatener( Liste ** a , Liste * b ){
     if( !a ) return;
     if( !b ) return;
-    Liste * c = dernier( a );
+    if( !*a ) {
+            *a = b;
+            return;
+    }
+    Liste * c = dernier( *a );
     if( !c ) return;
     c->suivant = b;
-    a->precedent = dernier(b);
+    (*a)->precedent = dernier(b);
     b->precedent = c;
 }
 

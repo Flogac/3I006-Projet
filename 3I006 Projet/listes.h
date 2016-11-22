@@ -10,6 +10,6 @@ Liste * nouvelleListe( char a , char b , Liste * precedent , Liste * suivant );
 
 Liste * dernier( Liste * a );
 
-Liste* concatener( Liste * a , Liste * b );
+void concatener( Liste ** a , Liste * b );
 
 void coupe( Liste *  a);
