@@ -20,4 +20,4 @@ int COUT2BISintel( int i , int j , int *** cout);
 
 void SOL2(int k1 , int l1 , int k2 , int l2 , Liste ** L );
 
-void appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste ** L , char ** Xe , char ** Ye , int dxye , int dgape , int tailleXe , int tailleYe );
+void appelSOL2( char * X2ae , char* Y2ae , char ** F2ae , char * X2be , char* Y2be , char ** F2be , int k1 , int l1 , int k2 , int l2 , Liste ** L , char * Xe , char * Ye , int dxye , int dgape , int tailleXe , int tailleYe );

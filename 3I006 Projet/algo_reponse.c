@@ -9,8 +9,8 @@ char ** F2a;
 char * X2b;
 char* Y2b ;
 char ** F2b;
-char * X;
-char * Y;
+char * Xg;
+char * Yg;
 int dxyg;
 int dgapg;
 int tailleXg;
@@ -203,9 +203,9 @@ Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dg
             taillex--;
             tailley--;
             if( align ){
-                concatener( &align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
+                concatener( &align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL , taillex , tailley) );
             }else{
-                align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL );
+                align = nouvelleListe( x[taillex-1] , y[tailley-1] , NULL, NULL , taillex , tailley);
                 align->precedent = align;
             }
         } else {
@@ -217,9 +217,9 @@ Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dg
                 taillex--;
                 tailley--;
                 if( align ){
-                    concatener( &align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL ) );
+                    concatener( &align , nouvelleListe( x[taillex-1] , y[tailley-1] , NULL , NULL , taillex , tailley) );
                 }else{
-                    align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL );
+                    align = nouvelleListe( x[taillex] , y[tailley-1] , NULL, NULL , taillex , tailley);
                     align->precedent = align;
                 }
             }else if( cmin == c2 ){
@@ -397,22 +397,22 @@ void SOL2(int k1 , int l1 , int k2 , int l2 , Liste ** L ){
 
     if( k2 - k1 > 0 || l2-l1 > 0 ){
         if( k2 - k1 <= 2 ){
-            for( i = k1 ; i <= k2 ; i++) X2a[i - k1] = X[i];
-            for( i = l1 ; i <= l2 ; i++) Y2a[i - k1] = Y[i];
+            for( i = k1 ; i <= k2 ; i++) X2a[i - k1] = Xg[i];
+            for( i = l1 ; i <= l2 ; i++) Y2a[i - k1] = Yg[i];
             concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxyg , dgapg ) );
             //return F2b[k2-k1 ][ l2-l1];
         }else{
             if( l2-l1 <= 2 ){
-                    for( i = k1 ; i <= k2 ; i++ ) X2b[i - k1 ] = X[i];
-                    for( i = l1 ; i <= l2 ; i++ ) Y2b[i - k1 ] = Y[i];
+                    for( i = k1 ; i <= k2 ; i++ ) X2b[i - k1 ] = Xg[i];
+                    for( i = l1 ; i <= l2 ; i++ ) Y2b[i - k1 ] = Yg[i];
                     concatener( L , SOL1( X2a , k2 - k1 +1 , Y2a , l2 - l1 +1 , dxyg , dgapg ) );
                     //return F2b[ k2-k1 ][ l2 -l1];
             }else{
                 j = l1 +((l2-l1+1)/2);
                 k = k1;
-                valmin = COUT2( X , Y , tailleXg , tailleYg , dxyg , dgapg , k1 , j ) + COUT2BIS( X , Y , tailleXg , tailleYg , dxyg , dgapg , k1 , j) ;
+                valmin = COUT2( Xg , Yg , tailleXg , tailleYg , dxyg , dgapg , k1 , j ) + COUT2BIS( Xg , Yg , tailleXg , tailleYg , dxyg , dgapg , k1 , j) ;
                 for( i = k1+1 ; i<= k2 ; i++){
-                    val = COUT2( X , Y , tailleXg , tailleYg , dxyg , dgapg , i , j ) + COUT2BIS( X , Y , tailleXg , tailleYg , dxyg , dgapg , i , j) ;
+                    val = COUT2( Xg , Yg , tailleXg , tailleYg , dxyg , dgapg , i , j ) + COUT2BIS( Xg , Yg , tailleXg , tailleYg , dxyg , dgapg , i , j) ;
                     if( valmin > val ){
                         valmin = val;
                         k = i;
@@ -426,16 +426,15 @@ void SOL2(int k1 , int l1 , int k2 , int l2 , Liste ** L ){
     }
 }
 
-
-void appelSOL2( char ** X2ae , char** Y2ae , char *** F2ae , char ** X2be , char** Y2be , char *** F2be , int k1 , int l1 , int k2 , int l2 , Liste ** L , char ** Xe , char ** Ye , int dxye , int dgape , int tailleXe , int tailleYe ){
- X2a = *X2ae ;
- Y2a = *Y2ae ;
- F2a = *F2ae ;
- X2b = *X2be ;
- Y2b = *Y2be ;
- F2b = *F2be ;
- X = *Xe;
- Y = *Ye;
+void appelSOL2( char * X2ae , char* Y2ae , char ** F2ae , char * X2be , char* Y2be , char ** F2be , int k1 , int l1 , int k2 , int l2 , Liste ** L , char * Xe , char * Ye , int dxye , int dgape , int tailleXe , int tailleYe ){
+ X2a = X2ae ;
+ Y2a = Y2ae ;
+ F2a = F2ae ;
+ X2b = X2be ;
+ Y2b = Y2be ;
+ F2b = F2be ;
+ Xg = Xe;
+ Yg = Ye;
 dxyg = dxye;
 dgapg = dgape;
 tailleXg = tailleXe;
