@@ -122,6 +122,7 @@ void afficherTailleRaisonnable( char * tabX , char * tabY , int tailleX , int ta
     for( i = 0 ; i < tailleX - 1 ; i++ ) printf( "%c " , tabX[i] );
     printf( "\n" );
     for( i = 0 ; i < tailleY - 1 ; i++ ) printf( "%c " , tabY[i] );
+    printf( "\n" );
 }
 
 //Question 4.2
@@ -227,6 +228,23 @@ Liste * SOL1( char  * x , int taillex , char * y , int tailley, int dxy , int dg
         }
     }
     return align;
+}
+
+void afficherListe( Liste * L ){
+    if(!L) return;
+
+    Liste * temp = L;
+    do{
+        printf( "%c " , L->x ) ;
+        temp = temp->suivant;
+    }while( temp );
+    printf( "\n" );
+    temp = L;
+    do{
+        printf( "%c " , L->y ) ;
+        temp = temp->suivant;
+    }while( temp );
+    printf( "\n" );
 }
 
 /*
