@@ -272,7 +272,20 @@ int COUT2intel( char * tabX , char * tabY , int tailleX , int tailleY , int dxy 
 }
 
 /*
-
+Entrées : tabX : tableau de caractères, tabY : liste de caractères, tailleX : entier, tailleY : entier, dxy : entier, dgap : entier
+i <-0, j <-0, cout[tailleX][tailleY]
+Pour i de 0 à tailleX  faire
+    Initialiser cout[i ], tailleY ;
+    Pour i de 0 à tailleX et pour j de 0 à tailleY faire
+       si i=0 faire
+            si j = 1 faire
+                 cout[i][j] <-dgap
+        sinon faire
+            si j = 0 faire
+                  cout|i]|j] <- cout[i][j-1] + dgap
+            sinon faire
+                  cout[i][j] <- min(cout[i][j-1] + dgap, cout[i-1][j] + dgap, cout[i-1][j-1] + dxy)
+   Retourne cout[tailleX-1][tailleY-1]
 */
 int COUT2( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int THEi , int THEj ){
     if( !tabX ) return 0;
@@ -296,6 +309,23 @@ int COUT2( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int
     return cout[tailleX-1][tailleY-1];
 }
 
+/*
+Algorithme : COUT2BIS
+Entrées : tabX : tableau de caractères, tabY : liste de caractères, tailleX : entier, tailleY : entier, dxy : entier, dgap : entier, THEi : entier, THEj : entier
+i <-0, j <-0, cout[tailleX][tailleY]
+Pour i de 0 à tailleX  faire
+    Initialiser cout[i ], tailleY ;
+    Pour i de 0 à tailleX et pour j de 0 à tailleY faire
+       si i=0 faire
+            si j = 1 faire
+                 cout[i][j] <-dgap
+        sinon faire
+            si j = 0 faire
+                  cout|i]|j] <- cout[i][j-1] + dgap
+            sinon faire
+                  cout[i][j] <- min(cout[i][j-1] + dgap, cout[i-1][j] + dgap, cout[i-1][j-1] + dxy)
+   Retourne cout[THEi][THEj]
+*/
 int COUT2BIS( char * tabX , char * tabY , int tailleX , int tailleY , int dxy , int dgap , int THEi , int THEj ){
     if( !tabX ) return 0;
     if( !tabY ) return 0;
