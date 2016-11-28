@@ -35,6 +35,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="algo_reponse.h" />
+		<Unit filename="listes.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="listes.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>

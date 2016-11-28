@@ -32,6 +32,7 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
 
     FILE * f;
     char buffer[256];
+
     int i,j;
 
     if( initialiserTableau( buffer , 256) == 0 ){
@@ -40,16 +41,17 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
     }
 
     f = fopen( nomfichier , "r");
+
     if( !fgets( buffer , 256 , f )){
         printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
         fclose( f );
         return -1;
     }
     //lecture de la chaîne de caractère.
-    i = 1;
-    while( buffer[i] != '-' ) i++;
-    taillePremiereListe = 0;
-    for( j = i ; j >=0 ; j-- ) *taillePremiereListe += ( buffer[j] - 48 ) * 10 * i--;
+    //i = 1;
+    //while( buffer[i] != '-' ) i++;
+    *taillePremiereListe = atoi( buffer );
+    //for( j = i ; j >=0 ; j-- ) *taillePremiereListe += ( buffer[j] - 48 ) * 10 * i--;
 
     if( initialiserTableau( buffer , 256) == 0){
         printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
@@ -57,7 +59,6 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
         return -1;
     }
 
-    f = fopen( nomfichier , "r");
     if( !fgets( buffer , 256 , f )){
         printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
         fclose( f );
@@ -65,9 +66,9 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
     }
     //lecture de la chaîne de caractère.
     i = 1;
-    while( buffer[i++] != '-' );
-    tailleSecondeListe = 0;
-    for( j = i ; j >=0 ; j-- ) *tailleSecondeListe += ( buffer[j] - 48 ) * 10 * i--;
+    //while( buffer[i++] != '\n' );
+    *tailleSecondeListe = atoi(buffer);
+    //for( j = i ; j >=0 ; j-- ) *tailleSecondeListe += ( buffer[j] - 48 ) * 10 * i--;
 
     //initialisation des tableaux de liste
     *premiereListe = ( char * ) malloc ( sizeof( char ) * (*taillePremiereListe));
@@ -75,18 +76,19 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
 
     //remplissage premier tableau
     i = *taillePremiereListe;
-    for( j = 0 ; j < i ; j++ ){
-        if( !fgets( buffer , 1 , f )){
+    //for( j = 0 ; j < i ; j++ ){
+        if( !fgets( *premiereListe , *taillePremiereListe , f )){
             printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
             fclose( f );
             free (*premiereListe);
             free (*secondeListe);
             return -1;
-        }
+        }/*
+        printf( "%c\n" , buffer[0] );
         *premiereListe[j] = buffer[0];
-    }
-
-    if( !fgets( buffer , 1 , f )){
+    }*/
+/*
+    if( !fgets( buffer , 0 , f )){
         printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
         fclose( f );
         free (*premiereListe);
@@ -97,15 +99,18 @@ int lectureTableau( char * nomfichier , char ** premiereListe , char ** secondeL
     //remplissage second tableau
     i = *tailleSecondeListe;
     for( j = 0 ; j < i ; j++ ){
-        if( !fgets( buffer , 1 , f )){
+        if( !fgets( buffer , 0 , f )){
             printf( "Probleme à l'execution de la fonction: lectureTableau.\n");
             fclose( f );
             free (*premiereListe);
             free (*secondeListe);
             return -1;
         }
+        printf( "%s\n" , buffer[0] );
         *secondeListe[j] = buffer[0];
-    }
+    }*/
+
+    fclose( f );
 
     return 1;
 

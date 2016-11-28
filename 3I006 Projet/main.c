@@ -23,7 +23,7 @@ return L;
 
 int main(){
 
-char * nomfichier = "toto";
+char * nomfichier = "toto.adn";
 char * X;
 char * Y;
 int tailleX;
@@ -32,9 +32,10 @@ int dxy = 3;
 int dgap = 2;
 
 lectureTableau( nomfichier , &X , &Y , &tailleX , &tailleY );
-afficherListe( SOL1( X , tailleX , Y , tailleY , dxy , dgap) );
+printf( "Première liste:\n%s \nSeconde liste:\n%s \n", X , Y );
+//afficherListe( SOL1( X , tailleX , Y , tailleY , dxy , dgap) );
 printf( "SOL1 fini, début SOL2.\n");
-afficherListe( mainSOL2( X , Y , tailleX , tailleY , dxy , dgap ));
+//afficherListe( mainSOL2( X , Y , tailleX , tailleY , dxy , dgap ));
 printf( "SOL2 fini\n");
 
 return 0;
